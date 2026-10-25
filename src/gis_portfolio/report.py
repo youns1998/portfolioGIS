@@ -19,7 +19,7 @@ def write_html(path, dataset, report):
         )
 
     polygons = []
-    for name, color in [("zones", "#e4ece1"), ("hazards", "#edc4a5")]:
+    for name, color in [("zones", "#f0f3f6"), ("hazards", "#fff1e5")]:
         for feature in dataset[name]:
             # Even-odd fill preserves Polygon holes in the visual result too.
             shape = " ".join(
@@ -29,7 +29,7 @@ def write_html(path, dataset, report):
             polygons.append(
                 '<path d="'
                 + shape
-                + f'" fill-rule="evenodd" fill="{color}" stroke="#c6d2bd"><title>'
+                + f'" fill-rule="evenodd" fill="{color}" stroke="#d1d9e0"><title>'
                 + html.escape(feature["properties"]["name"])
                 + "</title></path>"
             )
@@ -44,7 +44,7 @@ def write_html(path, dataset, report):
     for feature in dataset["centers"]:
         x, y = xy(feature["geometry"]["coordinates"])
         markers.append(
-            f'<rect x="{x - 6:.2f}" y="{y - 6:.2f}" width="12" height="12" fill="#2e4d6b" stroke="white"><title>'
+            f'<rect x="{x - 6:.2f}" y="{y - 6:.2f}" width="12" height="12" fill="#59636e" stroke="white"><title>'
             + html.escape(feature["properties"]["name"])
             + "</title></rect>"
         )

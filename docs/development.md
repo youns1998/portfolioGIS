@@ -12,6 +12,7 @@
 | DB 테이블·뷰·대조 | `postgis.py` |
 
 HTML·CSS·JavaScript를 별도 파일에서 수정하며, 분석할 때 하나의 독립 HTML로 합칩니다. 외부 지도 API·CDN은 사용하지 않습니다.
+화면은 GitHub·[Primer](https://primer.style/product/primitives/color/)를 참고한 흰색 본문·회색 헤더·파란색 링크를 사용합니다. 시설 우선순위는 파랑·주황·빨강으로 표시합니다.
 
 ![생성된 지도 화면](images/map-overview.png)
 

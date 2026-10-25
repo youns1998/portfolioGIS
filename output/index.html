@@ -6,109 +6,230 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>시설 점검 우선순위 · GIS 포트폴리오</title>
     <style>
-      :root {
-  --ink: #283e32;
-  --muted: #6b7a6b;
-  --line: #dae2d4;
+      /* GitHub / Primer-inspired UI. Priority colors describe data, not page decoration. */
+:root {
+  color-scheme: light;
+  --ink: #1f2328;
+  --muted: #59636e;
+  --line: #d1d9e0;
+  --surface: #f6f8fa;
+  --accent: #0969da;
 }
 * {
   box-sizing: border-box;
 }
+html {
+  scroll-padding-top: 20px;
+}
 body {
   margin: 0;
-  background: #f7f9f3;
+  background: #fff;
   color: var(--ink);
   font:
-    14px/1.7 "Segoe UI",
+    14px/1.5 -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     "Malgun Gothic",
     sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 .shell {
-  width: min(1180px, calc(100% - 40px));
+  width: min(1216px, calc(100% - 64px));
   margin: auto;
 }
-header {
+a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.app-header {
+  background: var(--surface);
+  box-shadow: 0 0 0 100vmax var(--surface);
+  clip-path: inset(0 -100vmax);
   border-bottom: 1px solid var(--line);
-  padding: 24px 0;
+}
+.topbar {
+  min-height: 72px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 16px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.brand-owner {
+  color: var(--muted);
+  font-weight: 400;
+}
+.brand-symbol {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+}
+.brand-symbol svg {
+  width: 22px;
+  height: 22px;
+}
+.header-download {
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--surface);
+  white-space: nowrap;
+}
+.app-tabs {
+  display: flex;
   gap: 20px;
 }
-header strong {
-  font-size: 18px;
+.app-tabs a {
+  position: relative;
+  padding: 10px 8px 13px;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
 }
-header span,
-small {
-  font-size: 11px;
-  color: var(--muted);
+.app-tabs a[aria-current]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 2px;
+  background: #fd8c73;
+  border-radius: 2px;
+}
+main {
+  padding-top: 28px;
 }
 h1 {
-  font-size: 30px;
-  letter-spacing: -0.04em;
-  margin: 34px 0 10px;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0 0 8px;
+  letter-spacing: normal;
 }
 h2 {
-  font-size: 15px;
-  margin: 0 0 15px;
+  font-size: 16px;
+  margin: 0 0 16px;
 }
 .lead {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 14px;
+  margin: 0;
 }
 .metrics {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin: 26px 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 24px 0;
 }
 .metrics > div {
-  border: 1px solid var(--line);
-  background: white;
-  padding: 16px 22px;
-  border-radius: 4px;
+  background: #fff;
+  padding: 16px 20px;
+  border-right: 1px solid var(--line);
+}
+.metrics > div:last-child {
+  border-right: 0;
 }
 .metrics span {
   display: block;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
 }
 .metrics strong {
-  font-size: 27px;
-  font-weight: 500;
+  display: block;
+  margin-top: 6px;
+  font-size: 24px;
+  font-weight: 600;
 }
 .filters {
   display: flex;
-  gap: 10px;
-  margin: 24px 0;
+  gap: 8px;
+  margin: 20px 0 12px;
 }
 input,
 select,
 button {
-  font: inherit;
-  border: 1px solid #c5d0bf;
-  background: white;
-  border-radius: 4px;
-  padding: 9px 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
   color: var(--ink);
+  min-height: 32px;
 }
 input {
   flex: 1;
   min-width: 0;
 }
+select,
+button {
+  background: var(--surface);
+}
+input::placeholder {
+  color: #6e7781;
+}
 button {
   cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+button:hover {
+  background: #eff2f5;
+}
+.status {
   font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 12px;
 }
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(230px, 1fr);
-  gap: 18px;
+  grid-template-columns: minmax(0, 3fr) minmax(260px, 1fr);
+  gap: 20px;
+  align-items: start;
 }
 .map {
   border: 1px solid var(--line);
-  background: #eef2e8;
-  border-radius: 4px;
+  background: #fff;
+  border-radius: 6px;
   overflow: hidden;
+}
+.map-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 13px;
+}
+.map-heading span {
+  font-size: 12px;
+  color: var(--muted);
 }
 svg {
   display: block;
@@ -116,20 +237,20 @@ svg {
   height: auto;
 }
 .asset {
-  fill: #537f62;
+  fill: #0969da;
   stroke: white;
   stroke-width: 2;
   cursor: pointer;
 }
 .asset[data-priority="P1"] {
-  fill: #bb5945;
+  fill: #cf222e;
 }
 .asset[data-priority="P2"] {
-  fill: #c69a44;
+  fill: #bf8700;
 }
 .asset:focus,
 .asset.selected {
-  stroke: #152c20;
+  stroke: #1f2328;
   stroke-width: 4;
   outline: none;
 }
@@ -139,93 +260,132 @@ svg {
 .detail {
   background: white;
   border: 1px solid var(--line);
-  padding: 20px;
-  border-radius: 4px;
+  border-radius: 6px;
+  min-height: 220px;
+  overflow: hidden;
+}
+.detail h2 {
+  padding: 14px 16px;
+  margin: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+  overflow-wrap: anywhere;
 }
 .detail p {
-  font-size: 12px;
+  font-size: 13px;
+  margin: 14px 16px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
 }
 .legend {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
   padding: 12px 16px;
   border-top: 1px solid var(--line);
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 12px;
 }
 .p1 {
-  color: #a3402c;
+  color: #cf222e;
 }
 .p2 {
-  color: #986c20;
+  color: #9a6700;
 }
 .p3 {
-  color: #427253;
+  color: #0969da;
 }
 .table-wrap {
   overflow: auto;
   margin-top: 24px;
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 6px;
 }
 table {
   border-collapse: collapse;
   width: 100%;
-  background: white;
-  font-size: 12px;
+  background: #fff;
+  font-size: 13px;
 }
 th,
 td {
   text-align: left;
-  padding: 13px;
+  padding: 13px 16px;
   border-bottom: 1px solid var(--line);
 }
 th {
   font-weight: 500;
+  font-size: 12px;
   color: var(--muted);
-  background: #eef2e8;
+  background: var(--surface);
+}
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+tbody tr:hover {
+  background: var(--surface);
 }
 td button {
   padding: 0;
+  min-height: 0;
   border: 0;
   text-align: left;
   background: none;
-  color: var(--ink);
+  color: var(--accent);
+  font-weight: 600;
+}
+td button:hover {
+  background: none;
+  text-decoration: underline;
 }
 .empty {
   text-align: center;
-  padding: 25px;
+  padding: 32px;
 }
 .notes {
-  padding: 25px 0;
+  padding: 24px 0;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
+  line-height: 1.7;
 }
 .notes p {
-  margin: 6px 0;
-}
-a {
-  color: inherit;
-  text-underline-offset: 4px;
-}
-.status {
-  font-size: 12px;
-  color: var(--muted);
+  margin: 8px 0;
 }
 footer {
   border-top: 1px solid var(--line);
-  padding: 22px 0;
-  font-size: 11px;
+  padding: 24px 0 32px;
+  font-size: 12px;
   color: var(--muted);
-}
-:focus-visible {
-  outline: 2px solid #466c3f;
-  outline-offset: 3px;
 }
 @media (max-width: 760px) {
   .shell {
-    width: calc(100% - 28px);
+    width: calc(100% - 32px);
+  }
+  .topbar {
+    min-height: 64px;
+    gap: 12px;
+  }
+  .brand {
+    font-size: 15px;
+    gap: 8px;
+  }
+  .brand-owner {
+    display: none;
+  }
+  .header-download {
+    font-size: 11px;
+    padding: 5px 8px;
+  }
+  .app-tabs {
+    gap: 10px;
+  }
+  .app-tabs a {
+    font-size: 13px;
+    padding-inline: 6px;
+  }
+  main {
+    padding-top: 24px;
   }
   .layout {
     grid-template-columns: 1fr;
@@ -240,36 +400,91 @@ footer {
     flex: 1;
     min-width: 0;
   }
-  .metrics {
-    gap: 8px;
+  .filters button {
+    white-space: nowrap;
   }
   .metrics > div {
     padding: 12px;
   }
-  h1 {
-    font-size: 25px;
+  .metrics span {
+    font-size: 11px;
   }
-  header span {
-    display: none;
+  .metrics strong {
+    font-size: 22px;
+  }
+  h1 {
+    font-size: 22px;
+  }
+  .map-heading {
+    padding: 12px;
+  }
+  .map-heading span {
+    font-size: 11px;
+  }
+  .detail {
+    min-height: 0;
   }
   table {
     min-width: 650px;
   }
+  .legend {
+    gap: 10px;
+    font-size: 11px;
+  }
+  input,
+  select,
+  button {
+    min-height: 36px;
+  }
 }
-;
+@media (max-width: 360px) {
+  .brand {
+    font-size: 14px;
+  }
+  .header-download {
+    padding: 5px 6px;
+    font-size: 10px;
+  }
+  .app-tabs {
+    gap: 4px;
+  }
+  .app-tabs a {
+    font-size: 12px;
+  }
+  .metrics > div {
+    padding: 12px 8px;
+  }
+}
+
     </style>
   </head>
   <body>
     <div class="shell">
-      <header>
-        <strong>시설점검 지도</strong>
-        <span>GIS / QGIS · PostgreSQL · PostGIS</span>
+      <header class="app-header">
+        <div class="topbar">
+          <a class="brand" href="#overview"
+            ><span class="brand-symbol" aria-hidden="true"
+              ><svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+              >
+                <path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-12-2 14" /></svg></span
+            ><span
+              ><span class="brand-owner">portfolio / </span>시설 점검 GIS</span
+            ></a
+          ><a class="header-download" href="facilities.csv">CSV 내보내기</a>
+        </div>
+        <nav class="app-tabs" aria-label="주 메뉴">
+          <a href="#overview" aria-current="page">시설 현황</a
+          ><a href="#facility-list">시설 목록</a
+          ><a href="report.json">분석 JSON</a>
+        </nav>
       </header>
-      <main>
-        <h1>어디를 먼저 점검해야 할까요?</h1>
-        <p class="lead">
-          시설 상태, 점검 경과, 위험구역과 지원 거점 접근성을 함께 살펴봅니다.
-        </p>
+      <main id="overview">
+        <h1>시설 점검 현황</h1>
+        <p class="lead">시설별 점검 우선순위와 판정 근거를 확인합니다.</p>
         <section class="metrics" aria-label="분석 요약">
           <div>
             <span>분석 시설</span>
@@ -305,12 +520,15 @@ footer {
         <p id="count" class="status" role="status"></p>
         <div class="layout">
           <div class="map">
+            <div class="map-heading">
+              <strong>시설 위치</strong><span>가상 데이터 · EPSG:4326</span>
+            </div>
             <svg
               viewBox="0 0 1000 670"
               role="img"
               aria-label="가상 공공시설 우선순위 지도"
             >
-              <path d="M 20.00,640.00 L 500.00,640.00 L 500.00,27.23 L 20.00,27.23 L 20.00,640.00 Z" fill-rule="evenodd" fill="#e4ece1" stroke="#c6d2bd"><title>서부 구역</title></path><path d="M 500.00,640.00 L 980.00,640.00 L 980.00,27.23 L 500.00,27.23 L 500.00,640.00 Z" fill-rule="evenodd" fill="#e4ece1" stroke="#c6d2bd"><title>동부 구역</title></path><path d="M 352.31,410.21 L 832.31,410.21 L 832.31,154.89 L 352.31,154.89 L 352.31,410.21 Z" fill-rule="evenodd" fill="#edc4a5" stroke="#c6d2bd"><title>가상 집중 점검구역</title></path><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 01" data-id="FAC-001" data-priority="P3" cx="130.77" cy="563.40" r="7"><title>가상 시설 01</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 02" data-id="FAC-002" data-priority="P3" cx="278.46" cy="563.40" r="7"><title>가상 시설 02</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 03" data-id="FAC-003" data-priority="P2" cx="426.15" cy="563.40" r="7"><title>가상 시설 03</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 04" data-id="FAC-004" data-priority="P2" cx="573.85" cy="563.40" r="7"><title>가상 시설 04</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 05" data-id="FAC-005" data-priority="P3" cx="721.54" cy="563.40" r="7"><title>가상 시설 05</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 06" data-id="FAC-006" data-priority="P3" cx="869.23" cy="563.40" r="7"><title>가상 시설 06</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 07" data-id="FAC-007" data-priority="P2" cx="130.77" cy="474.04" r="7"><title>가상 시설 07</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 08" data-id="FAC-008" data-priority="P2" cx="278.46" cy="474.04" r="7"><title>가상 시설 08</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 09" data-id="FAC-009" data-priority="P2" cx="426.15" cy="474.04" r="7"><title>가상 시설 09</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 10" data-id="FAC-010" data-priority="P3" cx="573.85" cy="474.04" r="7"><title>가상 시설 10</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 11" data-id="FAC-011" data-priority="P3" cx="721.54" cy="474.04" r="7"><title>가상 시설 11</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 12" data-id="FAC-012" data-priority="P1" cx="869.23" cy="474.04" r="7"><title>가상 시설 12</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 13" data-id="FAC-013" data-priority="P3" cx="130.77" cy="384.68" r="7"><title>가상 시설 13</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 14" data-id="FAC-014" data-priority="P2" cx="278.46" cy="384.68" r="7"><title>가상 시설 14</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 15" data-id="FAC-015" data-priority="P1" cx="426.15" cy="384.68" r="7"><title>가상 시설 15</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 16" data-id="FAC-016" data-priority="P1" cx="573.85" cy="384.68" r="7"><title>가상 시설 16</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 17" data-id="FAC-017" data-priority="P3" cx="721.54" cy="384.68" r="7"><title>가상 시설 17</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 18" data-id="FAC-018" data-priority="P3" cx="869.23" cy="384.68" r="7"><title>가상 시설 18</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 19" data-id="FAC-019" data-priority="P3" cx="130.77" cy="295.32" r="7"><title>가상 시설 19</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 20" data-id="FAC-020" data-priority="P2" cx="278.46" cy="295.32" r="7"><title>가상 시설 20</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 21" data-id="FAC-021" data-priority="P1" cx="426.15" cy="295.32" r="7"><title>가상 시설 21</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 22" data-id="FAC-022" data-priority="P2" cx="573.85" cy="295.32" r="7"><title>가상 시설 22</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 23" data-id="FAC-023" data-priority="P2" cx="721.54" cy="295.32" r="7"><title>가상 시설 23</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 24" data-id="FAC-024" data-priority="P1" cx="869.23" cy="295.32" r="7"><title>가상 시설 24</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 25" data-id="FAC-025" data-priority="P3" cx="130.77" cy="205.96" r="7"><title>가상 시설 25</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 26" data-id="FAC-026" data-priority="P3" cx="278.46" cy="205.96" r="7"><title>가상 시설 26</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 27" data-id="FAC-027" data-priority="P2" cx="426.15" cy="205.96" r="7"><title>가상 시설 27</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 28" data-id="FAC-028" data-priority="P1" cx="573.85" cy="205.96" r="7"><title>가상 시설 28</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 29" data-id="FAC-029" data-priority="P2" cx="721.54" cy="205.96" r="7"><title>가상 시설 29</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 30" data-id="FAC-030" data-priority="P2" cx="869.23" cy="205.96" r="7"><title>가상 시설 30</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 31" data-id="FAC-031" data-priority="P3" cx="130.77" cy="116.60" r="7"><title>가상 시설 31</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 32" data-id="FAC-032" data-priority="P2" cx="278.46" cy="116.60" r="7"><title>가상 시설 32</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 33" data-id="FAC-033" data-priority="P3" cx="426.15" cy="116.60" r="7"><title>가상 시설 33</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 34" data-id="FAC-034" data-priority="P3" cx="573.85" cy="116.60" r="7"><title>가상 시설 34</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 35" data-id="FAC-035" data-priority="P2" cx="721.54" cy="116.60" r="7"><title>가상 시설 35</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 36" data-id="FAC-036" data-priority="P1" cx="869.23" cy="116.60" r="7"><title>가상 시설 36</title></circle><rect x="235.54" y="174.43" width="12" height="12" fill="#2e4d6b" stroke="white"><title>가상 북부 지원 거점</title></rect><rect x="752.46" y="531.87" width="12" height="12" fill="#2e4d6b" stroke="white"><title>가상 남부 지원 거점</title></rect>
+              <path d="M 20.00,640.00 L 500.00,640.00 L 500.00,27.23 L 20.00,27.23 L 20.00,640.00 Z" fill-rule="evenodd" fill="#f0f3f6" stroke="#d1d9e0"><title>서부 구역</title></path><path d="M 500.00,640.00 L 980.00,640.00 L 980.00,27.23 L 500.00,27.23 L 500.00,640.00 Z" fill-rule="evenodd" fill="#f0f3f6" stroke="#d1d9e0"><title>동부 구역</title></path><path d="M 352.31,410.21 L 832.31,410.21 L 832.31,154.89 L 352.31,154.89 L 352.31,410.21 Z" fill-rule="evenodd" fill="#fff1e5" stroke="#d1d9e0"><title>가상 집중 점검구역</title></path><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 01" data-id="FAC-001" data-priority="P3" cx="130.77" cy="563.40" r="7"><title>가상 시설 01</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 02" data-id="FAC-002" data-priority="P3" cx="278.46" cy="563.40" r="7"><title>가상 시설 02</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 03" data-id="FAC-003" data-priority="P2" cx="426.15" cy="563.40" r="7"><title>가상 시설 03</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 04" data-id="FAC-004" data-priority="P2" cx="573.85" cy="563.40" r="7"><title>가상 시설 04</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 05" data-id="FAC-005" data-priority="P3" cx="721.54" cy="563.40" r="7"><title>가상 시설 05</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 06" data-id="FAC-006" data-priority="P3" cx="869.23" cy="563.40" r="7"><title>가상 시설 06</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 07" data-id="FAC-007" data-priority="P2" cx="130.77" cy="474.04" r="7"><title>가상 시설 07</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 08" data-id="FAC-008" data-priority="P2" cx="278.46" cy="474.04" r="7"><title>가상 시설 08</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 09" data-id="FAC-009" data-priority="P2" cx="426.15" cy="474.04" r="7"><title>가상 시설 09</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 10" data-id="FAC-010" data-priority="P3" cx="573.85" cy="474.04" r="7"><title>가상 시설 10</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 11" data-id="FAC-011" data-priority="P3" cx="721.54" cy="474.04" r="7"><title>가상 시설 11</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 12" data-id="FAC-012" data-priority="P1" cx="869.23" cy="474.04" r="7"><title>가상 시설 12</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 13" data-id="FAC-013" data-priority="P3" cx="130.77" cy="384.68" r="7"><title>가상 시설 13</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 14" data-id="FAC-014" data-priority="P2" cx="278.46" cy="384.68" r="7"><title>가상 시설 14</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 15" data-id="FAC-015" data-priority="P1" cx="426.15" cy="384.68" r="7"><title>가상 시설 15</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 16" data-id="FAC-016" data-priority="P1" cx="573.85" cy="384.68" r="7"><title>가상 시설 16</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 17" data-id="FAC-017" data-priority="P3" cx="721.54" cy="384.68" r="7"><title>가상 시설 17</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 18" data-id="FAC-018" data-priority="P3" cx="869.23" cy="384.68" r="7"><title>가상 시설 18</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 19" data-id="FAC-019" data-priority="P3" cx="130.77" cy="295.32" r="7"><title>가상 시설 19</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 20" data-id="FAC-020" data-priority="P2" cx="278.46" cy="295.32" r="7"><title>가상 시설 20</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 21" data-id="FAC-021" data-priority="P1" cx="426.15" cy="295.32" r="7"><title>가상 시설 21</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 22" data-id="FAC-022" data-priority="P2" cx="573.85" cy="295.32" r="7"><title>가상 시설 22</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 23" data-id="FAC-023" data-priority="P2" cx="721.54" cy="295.32" r="7"><title>가상 시설 23</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 24" data-id="FAC-024" data-priority="P1" cx="869.23" cy="295.32" r="7"><title>가상 시설 24</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 25" data-id="FAC-025" data-priority="P3" cx="130.77" cy="205.96" r="7"><title>가상 시설 25</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 26" data-id="FAC-026" data-priority="P3" cx="278.46" cy="205.96" r="7"><title>가상 시설 26</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 27" data-id="FAC-027" data-priority="P2" cx="426.15" cy="205.96" r="7"><title>가상 시설 27</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 28" data-id="FAC-028" data-priority="P1" cx="573.85" cy="205.96" r="7"><title>가상 시설 28</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 29" data-id="FAC-029" data-priority="P2" cx="721.54" cy="205.96" r="7"><title>가상 시설 29</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 30" data-id="FAC-030" data-priority="P2" cx="869.23" cy="205.96" r="7"><title>가상 시설 30</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 31" data-id="FAC-031" data-priority="P3" cx="130.77" cy="116.60" r="7"><title>가상 시설 31</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 32" data-id="FAC-032" data-priority="P2" cx="278.46" cy="116.60" r="7"><title>가상 시설 32</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 33" data-id="FAC-033" data-priority="P3" cx="426.15" cy="116.60" r="7"><title>가상 시설 33</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 34" data-id="FAC-034" data-priority="P3" cx="573.85" cy="116.60" r="7"><title>가상 시설 34</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 35" data-id="FAC-035" data-priority="P2" cx="721.54" cy="116.60" r="7"><title>가상 시설 35</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 36" data-id="FAC-036" data-priority="P1" cx="869.23" cy="116.60" r="7"><title>가상 시설 36</title></circle><rect x="235.54" y="174.43" width="12" height="12" fill="#59636e" stroke="white"><title>가상 북부 지원 거점</title></rect><rect x="752.46" y="531.87" width="12" height="12" fill="#59636e" stroke="white"><title>가상 남부 지원 거점</title></rect>
             </svg>
             <div class="legend">
               <span class="p1">● P1 우선 점검</span>
@@ -327,7 +545,7 @@ footer {
             </p>
           </aside>
         </div>
-        <div class="table-wrap">
+        <div class="table-wrap" id="facility-list">
           <table>
             <thead>
               <tr>
