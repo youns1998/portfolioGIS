@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <link rel="icon" href="data:," />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>시설 점검 우선순위 · GIS 포트폴리오</title>
+    <style>
+      @@STYLES@@;
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header>
+        <strong>시설점검 지도</strong>
+        <span>GIS / QGIS · PostgreSQL · PostGIS</span>
+      </header>
+      <main>
+        <h1>어디를 먼저 점검해야 할까요?</h1>
+        <p class="lead">
+          시설 상태, 점검 경과, 위험구역과 지원 거점 접근성을 함께 살펴봅니다.
+        </p>
+        <section class="metrics" aria-label="분석 요약">
+          <div>
+            <span>분석 시설</span>
+            <strong id="total"> </strong>
+          </div>
+          <div>
+            <span>우선 점검 P1</span>
+            <strong id="high"> </strong>
+          </div>
+          <div>
+            <span>지원 반경 밖</span>
+            <strong id="uncovered"> </strong>
+          </div>
+        </section>
+        <div class="filters">
+          <input
+            id="search"
+            type="search"
+            placeholder="시설명 또는 ID 검색"
+            aria-label="시설 검색"
+          />
+          <select id="priority" aria-label="우선순위">
+            <option value="">모든 우선순위</option>
+            <option>P1</option>
+            <option>P2</option>
+            <option>P3</option>
+          </select>
+          <select id="zone" aria-label="구역">
+            <option value="">모든 구역</option>
+          </select>
+          <button id="download">현재 목록 CSV</button>
+        </div>
+        <p id="count" class="status" role="status"></p>
+        <div class="layout">
+          <div class="map">
+            <svg
+              viewBox="0 0 1000 670"
+              role="img"
+              aria-label="가상 공공시설 우선순위 지도"
+            >
+              @@POLYGONS@@@@MARKERS@@
+            </svg>
+            <div class="legend">
+              <span class="p1">● P1 우선 점검</span>
+              <span class="p2">● P2 검토</span>
+              <span class="p3">● P3 일반</span>
+              <span>■ 지원 거점</span>
+              <span>주황 영역: 가상 위험구역</span>
+            </div>
+          </div>
+          <aside class="detail" id="detail">
+            <h2>시설을 선택하세요</h2>
+            <p>
+              지도 또는 목록의 시설명을 누르면 점검 근거를 확인할 수 있습니다.
+            </p>
+          </aside>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>시설 / ID</th>
+                <th>구역</th>
+                <th>우선순위</th>
+                <th>점수</th>
+                <th>최근접 거점</th>
+                <th>거리</th>
+                <th>점검 근거</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+        <section class="notes">
+          <p id="basis"></p>
+          <p>
+            점수: 보수 필요 35 + 점검 180일 초과 25 + 가상 위험구역 25 + 지원
+            반경 밖 15. P1 ≥60, P2 ≥30, 나머지 P3.
+          </p>
+          <p>
+            거리: WGS84 구면 haversine. PostGIS geography의 타원체 거리와 소폭
+            차이가 있으며, 실제 설계·법정 판정 용도로 사용하지 않습니다.
+          </p>
+          <p>
+            지도의 배경·위치·시설은 직접 만든 가상 예제입니다. 실제 공공데이터나
+            국가사업 수행 실적이 아닙니다.
+          </p>
+          <p>
+            <a href="analysis.gpkg">GeoPackage</a> ·
+            <a href="facility-review.qgs">QGIS 프로젝트</a> ·
+            <a href="facilities.csv">전체 CSV</a> ·
+            <a href="report.json">분석 JSON</a> ·
+            <a href="postgis.sql">PostGIS SQL</a>
+          </p>
+        </section>
+      </main>
+      <footer>
+        개인 포트폴리오 · 좌표계 EPSG:4326 · 외부 지도/API 없이 재현할 수
+        있습니다.
+      </footer>
+    </div>
+    <script id="report-data" type="application/json">
+      @@DATA@@
+    </script>
+    <script>
+      @@SCRIPT@@
+    </script>
+  </body>
+</html>

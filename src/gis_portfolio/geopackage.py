@@ -1,4 +1,4 @@
-import datetime, json, sqlite3, struct
+import json, sqlite3, struct
 from pathlib import Path
 
 WKT = 'GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433],AUTHORITY["EPSG","4326"]]'

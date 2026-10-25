@@ -1,13 +1,515 @@
-<!doctype html><html lang="ko"><head><link rel="icon" href="data:,"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>시설 점검 우선순위 · GIS 포트폴리오</title><style>
-:root{--ink:#283e32;--muted:#6b7a6b;--line:#dae2d4}*{box-sizing:border-box}body{margin:0;background:#f7f9f3;color:var(--ink);font:14px/1.7 "Segoe UI","Malgun Gothic",sans-serif}.shell{width:min(1180px,calc(100% - 40px));margin:auto}header{border-bottom:1px solid var(--line);padding:24px 0;display:flex;justify-content:space-between;gap:20px}header strong{font-size:18px}header span,small{font-size:11px;color:var(--muted)}h1{font-size:30px;letter-spacing:-.04em;margin:34px 0 10px}h2{font-size:15px;margin:0 0 15px}.lead{color:var(--muted);font-size:13px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0}.metrics>div{border:1px solid var(--line);background:white;padding:16px 22px;border-radius:4px}.metrics span{display:block;font-size:11px;color:var(--muted)}.metrics strong{font-size:27px;font-weight:500}.filters{display:flex;gap:10px;margin:24px 0}input,select,button{font:inherit;border:1px solid #c5d0bf;background:white;border-radius:4px;padding:9px 12px;color:var(--ink)}input{flex:1;min-width:0}button{cursor:pointer;font-size:12px}.layout{display:grid;grid-template-columns:minmax(0,3fr) minmax(230px,1fr);gap:18px}.map{border:1px solid var(--line);background:#eef2e8;border-radius:4px;overflow:hidden}svg{display:block;width:100%;height:auto}.asset{fill:#537f62;stroke:white;stroke-width:2;cursor:pointer}.asset[data-priority=P1]{fill:#bb5945}.asset[data-priority=P2]{fill:#c69a44}.asset:focus,.asset.selected{stroke:#152c20;stroke-width:4;outline:none}.asset[hidden]{display:none}.detail{background:white;border:1px solid var(--line);padding:20px;border-radius:4px}.detail p{font-size:12px}.legend{font-size:11px;color:var(--muted);padding:12px 16px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:14px}.p1{color:#a3402c}.p2{color:#986c20}.p3{color:#427253}.table-wrap{overflow:auto;margin-top:24px;border:1px solid var(--line);border-radius:4px}table{border-collapse:collapse;width:100%;background:white;font-size:12px}th,td{text-align:left;padding:13px;border-bottom:1px solid var(--line)}th{font-weight:500;color:var(--muted);background:#eef2e8}td button{padding:0;border:0;text-align:left;background:none;color:var(--ink)}.empty{text-align:center;padding:25px}.notes{padding:25px 0;color:var(--muted);font-size:11px}.notes p{margin:6px 0}a{color:inherit;text-underline-offset:4px}.status{font-size:12px;color:var(--muted)}footer{border-top:1px solid var(--line);padding:22px 0;font-size:11px;color:var(--muted)}:focus-visible{outline:2px solid #466c3f;outline-offset:3px}@media(max-width:760px){.shell{width:calc(100% - 28px)}.layout{grid-template-columns:1fr}.filters{flex-wrap:wrap}.filters input{flex-basis:100%}.filters select{flex:1;min-width:0}.metrics{gap:8px}.metrics>div{padding:12px}h1{font-size:25px}header span{display:none}table{min-width:650px}}
-</style></head><body><div class="shell"><header><strong>시설점검 지도</strong><span>GIS / QGIS · PostgreSQL · PostGIS</span></header><main><h1>어디를 먼저 점검해야 할까요?</h1><p class="lead">시설 상태, 점검 경과, 위험구역과 지원 거점 접근성을 함께 살펴봅니다.</p><section class="metrics" aria-label="분석 요약"><div><span>분석 시설</span><strong id="total"></strong></div><div><span>우선 점검 P1</span><strong id="high"></strong></div><div><span>지원 반경 밖</span><strong id="uncovered"></strong></div></section><div class="filters"><input id="search" type="search" placeholder="시설명 또는 ID 검색" aria-label="시설 검색"><select id="priority" aria-label="우선순위"><option value="">모든 우선순위</option><option>P1</option><option>P2</option><option>P3</option></select><select id="zone" aria-label="구역"><option value="">모든 구역</option></select><button id="download">현재 목록 CSV</button></div><p id="count" class="status" role="status"></p><div class="layout"><div class="map"><svg viewBox="0 0 1000 670" role="img" aria-label="가상 공공시설 우선순위 지도"><path d="M 20.00,640.00 L 500.00,640.00 L 500.00,27.23 L 20.00,27.23 L 20.00,640.00 Z" fill-rule="evenodd" fill="#e4ece1" stroke="#c6d2bd"><title>서부 구역</title></path><path d="M 500.00,640.00 L 980.00,640.00 L 980.00,27.23 L 500.00,27.23 L 500.00,640.00 Z" fill-rule="evenodd" fill="#e4ece1" stroke="#c6d2bd"><title>동부 구역</title></path><path d="M 352.31,410.21 L 832.31,410.21 L 832.31,154.89 L 352.31,154.89 L 352.31,410.21 Z" fill-rule="evenodd" fill="#edc4a5" stroke="#c6d2bd"><title>가상 집중 점검구역</title></path><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 01" data-id="FAC-001" data-priority="P3" cx="130.77" cy="563.40" r="7"><title>가상 시설 01</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 02" data-id="FAC-002" data-priority="P3" cx="278.46" cy="563.40" r="7"><title>가상 시설 02</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 03" data-id="FAC-003" data-priority="P2" cx="426.15" cy="563.40" r="7"><title>가상 시설 03</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 04" data-id="FAC-004" data-priority="P2" cx="573.85" cy="563.40" r="7"><title>가상 시설 04</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 05" data-id="FAC-005" data-priority="P3" cx="721.54" cy="563.40" r="7"><title>가상 시설 05</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 06" data-id="FAC-006" data-priority="P3" cx="869.23" cy="563.40" r="7"><title>가상 시설 06</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 07" data-id="FAC-007" data-priority="P2" cx="130.77" cy="474.04" r="7"><title>가상 시설 07</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 08" data-id="FAC-008" data-priority="P2" cx="278.46" cy="474.04" r="7"><title>가상 시설 08</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 09" data-id="FAC-009" data-priority="P2" cx="426.15" cy="474.04" r="7"><title>가상 시설 09</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 10" data-id="FAC-010" data-priority="P3" cx="573.85" cy="474.04" r="7"><title>가상 시설 10</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 11" data-id="FAC-011" data-priority="P3" cx="721.54" cy="474.04" r="7"><title>가상 시설 11</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 12" data-id="FAC-012" data-priority="P1" cx="869.23" cy="474.04" r="7"><title>가상 시설 12</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 13" data-id="FAC-013" data-priority="P3" cx="130.77" cy="384.68" r="7"><title>가상 시설 13</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 14" data-id="FAC-014" data-priority="P2" cx="278.46" cy="384.68" r="7"><title>가상 시설 14</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 15" data-id="FAC-015" data-priority="P1" cx="426.15" cy="384.68" r="7"><title>가상 시설 15</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 16" data-id="FAC-016" data-priority="P1" cx="573.85" cy="384.68" r="7"><title>가상 시설 16</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 17" data-id="FAC-017" data-priority="P3" cx="721.54" cy="384.68" r="7"><title>가상 시설 17</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 18" data-id="FAC-018" data-priority="P3" cx="869.23" cy="384.68" r="7"><title>가상 시설 18</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 19" data-id="FAC-019" data-priority="P3" cx="130.77" cy="295.32" r="7"><title>가상 시설 19</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 20" data-id="FAC-020" data-priority="P2" cx="278.46" cy="295.32" r="7"><title>가상 시설 20</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 21" data-id="FAC-021" data-priority="P1" cx="426.15" cy="295.32" r="7"><title>가상 시설 21</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 22" data-id="FAC-022" data-priority="P2" cx="573.85" cy="295.32" r="7"><title>가상 시설 22</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 23" data-id="FAC-023" data-priority="P2" cx="721.54" cy="295.32" r="7"><title>가상 시설 23</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 24" data-id="FAC-024" data-priority="P1" cx="869.23" cy="295.32" r="7"><title>가상 시설 24</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 25" data-id="FAC-025" data-priority="P3" cx="130.77" cy="205.96" r="7"><title>가상 시설 25</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 26" data-id="FAC-026" data-priority="P3" cx="278.46" cy="205.96" r="7"><title>가상 시설 26</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 27" data-id="FAC-027" data-priority="P2" cx="426.15" cy="205.96" r="7"><title>가상 시설 27</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 28" data-id="FAC-028" data-priority="P1" cx="573.85" cy="205.96" r="7"><title>가상 시설 28</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 29" data-id="FAC-029" data-priority="P2" cx="721.54" cy="205.96" r="7"><title>가상 시설 29</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 30" data-id="FAC-030" data-priority="P2" cx="869.23" cy="205.96" r="7"><title>가상 시설 30</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 31" data-id="FAC-031" data-priority="P3" cx="130.77" cy="116.60" r="7"><title>가상 시설 31</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 32" data-id="FAC-032" data-priority="P2" cx="278.46" cy="116.60" r="7"><title>가상 시설 32</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 33" data-id="FAC-033" data-priority="P3" cx="426.15" cy="116.60" r="7"><title>가상 시설 33</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 34" data-id="FAC-034" data-priority="P3" cx="573.85" cy="116.60" r="7"><title>가상 시설 34</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 35" data-id="FAC-035" data-priority="P2" cx="721.54" cy="116.60" r="7"><title>가상 시설 35</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 36" data-id="FAC-036" data-priority="P1" cx="869.23" cy="116.60" r="7"><title>가상 시설 36</title></circle><rect x="235.54" y="174.43" width="12" height="12" fill="#2e4d6b" stroke="white"><title>가상 북부 지원 거점</title></rect><rect x="752.46" y="531.87" width="12" height="12" fill="#2e4d6b" stroke="white"><title>가상 남부 지원 거점</title></rect></svg><div class="legend"><span class="p1">● P1 우선 점검</span><span class="p2">● P2 검토</span><span class="p3">● P3 일반</span><span>■ 지원 거점</span><span>주황 영역: 가상 위험구역</span></div></div><aside class="detail" id="detail"><h2>시설을 선택하세요</h2><p>지도 또는 목록의 시설명을 누르면 점검 근거를 확인할 수 있습니다.</p></aside></div><div class="table-wrap"><table><thead><tr><th>시설 / ID</th><th>구역</th><th>우선순위</th><th>점수</th><th>최근접 거점</th><th>거리</th><th>점검 근거</th></tr></thead><tbody id="rows"></tbody></table></div><section class="notes"><p id="basis"></p><p>점수: 보수 필요 35 + 점검 180일 초과 25 + 가상 위험구역 25 + 지원 반경 밖 15. P1 ≥60, P2 ≥30, 나머지 P3.</p><p>거리: WGS84 구면 haversine. PostGIS geography의 타원체 거리와 소폭 차이가 있으며, 실제 설계·법정 판정 용도로 사용하지 않습니다.</p><p>지도의 배경·위치·시설은 직접 만든 가상 예제입니다. 실제 공공데이터나 국가사업 수행 실적이 아닙니다.</p><p><a href="analysis.gpkg">GeoPackage</a> · <a href="facility-review.qgs">QGIS 프로젝트</a> · <a href="facilities.csv">전체 CSV</a> · <a href="report.json">분석 JSON</a> · <a href="postgis.sql">PostGIS SQL</a></p></section></main><footer>개인 포트폴리오 · 좌표계 EPSG:4326 · 외부 지도/API 없이 재현할 수 있습니다.</footer></div><script id="report-data" type="application/json">{"as_of": "2026-10-25", "radius_m": 750, "distance_method": "WGS84 coordinates / spherical haversine R=6371008.8m; PostGIS geography uses spheroid", "synthetic": true, "total": 36, "uncovered": 19, "high_priority": 7, "rows": [{"id": "FAC-001", "name": "가상 시설 01", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-B", "distance_m": 1521.44, "covered": false, "hazard": false, "overdue": false, "score": 15, "priority": "P3", "reasons": "지원 반경 밖", "lon": 127.42, "lat": 36.61}, {"id": "FAC-002", "name": "가상 시설 02", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-B", "distance_m": 1165.66, "covered": false, "hazard": false, "overdue": false, "score": 15, "priority": "P3", "reasons": "지원 반경 밖", "lon": 127.424, "lat": 36.61}, {"id": "FAC-003", "name": "가상 시설 03", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "서부 구역", "nearest_center": "CENTER-B", "distance_m": 810.97, "covered": false, "hazard": false, "overdue": true, "score": 40, "priority": "P2", "reasons": "점검 180일 초과 · 지원 반경 밖", "lon": 127.428, "lat": 36.61}, {"id": "FAC-004", "name": "가상 시설 04", "kind": "안전표지", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 459.93, "covered": true, "hazard": false, "overdue": false, "score": 35, "priority": "P2", "reasons": "보수 필요", "lon": 127.432, "lat": 36.61}, {"id": "FAC-005", "name": "가상 시설 05", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 142.59, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.436, "lat": 36.61}, {"id": "FAC-006", "name": "가상 시설 06", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 289.94, "covered": true, "hazard": false, "overdue": true, "score": 25, "priority": "P3", "reasons": "점검 180일 초과", "lon": 127.44, "lat": 36.61}, {"id": "FAC-007", "name": "가상 시설 07", "kind": "안전표지", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 1306.47, "covered": false, "hazard": false, "overdue": false, "score": 50, "priority": "P2", "reasons": "보수 필요 · 지원 반경 밖", "lon": 127.42, "lat": 36.6135}, {"id": "FAC-008", "name": "가상 시설 08", "kind": "보행시설", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-B", "distance_m": 1193.15, "covered": false, "hazard": false, "overdue": false, "score": 50, "priority": "P2", "reasons": "보수 필요 · 지원 반경 밖", "lon": 127.424, "lat": 36.6135}, {"id": "FAC-009", "name": "가상 시설 09", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "서부 구역", "nearest_center": "CENTER-B", "distance_m": 850.04, "covered": false, "hazard": false, "overdue": true, "score": 40, "priority": "P2", "reasons": "점검 180일 초과 · 지원 반경 밖", "lon": 127.428, "lat": 36.6135}, {"id": "FAC-010", "name": "가상 시설 10", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 525.77, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.432, "lat": 36.6135}, {"id": "FAC-011", "name": "가상 시설 11", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 291.97, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.436, "lat": 36.6135}, {"id": "FAC-012", "name": "가상 시설 12", "kind": "배수시설", "condition": "REPAIR", "last_inspected": "2026-01-10", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 385.97, "covered": true, "hazard": false, "overdue": true, "score": 60, "priority": "P1", "reasons": "보수 필요 · 점검 180일 초과", "lon": 127.44, "lat": 36.6135}, {"id": "FAC-013", "name": "가상 시설 13", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 928.98, "covered": false, "hazard": false, "overdue": false, "score": 15, "priority": "P3", "reasons": "지원 반경 밖", "lon": 127.42, "lat": 36.617}, {"id": "FAC-014", "name": "가상 시설 14", "kind": "보행시설", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 894.03, "covered": false, "hazard": false, "overdue": false, "score": 50, "priority": "P2", "reasons": "보수 필요 · 지원 반경 밖", "lon": 127.424, "lat": 36.617}, {"id": "FAC-015", "name": "가상 시설 15", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 995.21, "covered": false, "hazard": true, "overdue": true, "score": 65, "priority": "P1", "reasons": "점검 180일 초과 · 가상 위험구역 · 지원 반경 밖", "lon": 127.428, "lat": 36.617}, {"id": "FAC-016", "name": "가상 시설 16", "kind": "안전표지", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 802.66, "covered": false, "hazard": true, "overdue": false, "score": 75, "priority": "P1", "reasons": "보수 필요 · 가상 위험구역 · 지원 반경 밖", "lon": 127.432, "lat": 36.617}, {"id": "FAC-017", "name": "가상 시설 17", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 673.11, "covered": true, "hazard": true, "overdue": false, "score": 25, "priority": "P3", "reasons": "가상 위험구역", "lon": 127.436, "lat": 36.617}, {"id": "FAC-018", "name": "가상 시설 18", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 718.9, "covered": true, "hazard": false, "overdue": true, "score": 25, "priority": "P3", "reasons": "점검 180일 초과", "lon": 127.44, "lat": 36.617}, {"id": "FAC-019", "name": "가상 시설 19", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 567.5, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.42, "lat": 36.6205}, {"id": "FAC-020", "name": "가상 시설 20", "kind": "보행시설", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 508.27, "covered": true, "hazard": false, "overdue": false, "score": 35, "priority": "P2", "reasons": "보수 필요", "lon": 127.424, "lat": 36.6205}, {"id": "FAC-021", "name": "가상 시설 21", "kind": "배수시설", "condition": "REPAIR", "last_inspected": "2026-01-10", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 670.44, "covered": true, "hazard": true, "overdue": true, "score": 85, "priority": "P1", "reasons": "보수 필요 · 점검 180일 초과 · 가상 위험구역", "lon": 127.428, "lat": 36.6205}, {"id": "FAC-022", "name": "가상 시설 22", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-A", "distance_m": 946.3, "covered": false, "hazard": true, "overdue": false, "score": 40, "priority": "P2", "reasons": "가상 위험구역 · 지원 반경 밖", "lon": 127.432, "lat": 36.6205}, {"id": "FAC-023", "name": "가상 시설 23", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 1060.12, "covered": false, "hazard": true, "overdue": false, "score": 40, "priority": "P2", "reasons": "가상 위험구역 · 지원 반경 밖", "lon": 127.436, "lat": 36.6205}, {"id": "FAC-024", "name": "가상 시설 24", "kind": "배수시설", "condition": "REPAIR", "last_inspected": "2026-01-10", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 1089.76, "covered": false, "hazard": false, "overdue": true, "score": 75, "priority": "P1", "reasons": "보수 필요 · 점검 180일 초과 · 지원 반경 밖", "lon": 127.44, "lat": 36.6205}, {"id": "FAC-025", "name": "가상 시설 25", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 289.9, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.42, "lat": 36.624}, {"id": "FAC-026", "name": "가상 시설 26", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 142.58, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.424, "lat": 36.624}, {"id": "FAC-027", "name": "가상 시설 27", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 459.85, "covered": true, "hazard": true, "overdue": true, "score": 50, "priority": "P2", "reasons": "점검 180일 초과 · 가상 위험구역", "lon": 127.428, "lat": 36.624}, {"id": "FAC-028", "name": "가상 시설 28", "kind": "안전표지", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-A", "distance_m": 810.83, "covered": false, "hazard": true, "overdue": false, "score": 75, "priority": "P1", "reasons": "보수 필요 · 가상 위험구역 · 지원 반경 밖", "lon": 127.432, "lat": 36.624}, {"id": "FAC-029", "name": "가상 시설 29", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-A", "distance_m": 1165.45, "covered": false, "hazard": true, "overdue": false, "score": 40, "priority": "P2", "reasons": "가상 위험구역 · 지원 반경 밖", "lon": 127.436, "lat": 36.624}, {"id": "FAC-030", "name": "가상 시설 30", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 1470.12, "covered": false, "hazard": false, "overdue": true, "score": 40, "priority": "P2", "reasons": "점검 180일 초과 · 지원 반경 밖", "lon": 127.44, "lat": 36.624}, {"id": "FAC-031", "name": "가상 시설 31", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 385.94, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.42, "lat": 36.6275}, {"id": "FAC-032", "name": "가상 시설 32", "kind": "보행시설", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 291.96, "covered": true, "hazard": false, "overdue": false, "score": 35, "priority": "P2", "reasons": "보수 필요", "lon": 127.424, "lat": 36.6275}, {"id": "FAC-033", "name": "가상 시설 33", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 525.71, "covered": true, "hazard": false, "overdue": true, "score": 25, "priority": "P3", "reasons": "점검 180일 초과", "lon": 127.428, "lat": 36.6275}, {"id": "FAC-034", "name": "가상 시설 34", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-A", "distance_m": 849.9, "covered": false, "hazard": false, "overdue": false, "score": 15, "priority": "P3", "reasons": "지원 반경 밖", "lon": 127.432, "lat": 36.6275}, {"id": "FAC-035", "name": "가상 시설 35", "kind": "보행시설", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-A", "distance_m": 1192.95, "covered": false, "hazard": false, "overdue": false, "score": 50, "priority": "P2", "reasons": "보수 필요 · 지원 반경 밖", "lon": 127.436, "lat": 36.6275}, {"id": "FAC-036", "name": "가상 시설 36", "kind": "배수시설", "condition": "REPAIR", "last_inspected": "2026-01-10", "zone": "동부 구역", "nearest_center": "CENTER-A", "distance_m": 1542.32, "covered": false, "hazard": false, "overdue": true, "score": 75, "priority": "P1", "reasons": "보수 필요 · 점검 180일 초과 · 지원 반경 밖", "lon": 127.44, "lat": 36.6275}]}</script><script>
-const report=JSON.parse(document.querySelector('#report-data').textContent);const rows=report.rows;let shown=rows;
-document.querySelector('#total').textContent=report.total;document.querySelector('#high').textContent=report.high_priority;document.querySelector('#uncovered').textContent=report.uncovered;document.querySelector('#basis').textContent=`기준일 ${report.as_of} · 지원 반경 ${report.radius_m}m · 가상 시설 ${report.total}개`;
-for(const zone of [...new Set(rows.map(r=>r.zone))].sort()){const option=document.createElement('option');option.value=zone;option.textContent=zone;document.querySelector('#zone').append(option)}
-function select(id){const row=rows.find(r=>r.id===id);if(!row)return;const box=document.querySelector('#detail');box.replaceChildren();const title=document.createElement('h2');title.textContent=row.name;box.append(title);for(const text of [`${row.id} · ${row.kind}`,`구역: ${row.zone}`,`우선순위: ${row.priority} / ${row.score}점`,`최근접 거점: ${row.nearest_center}`,`거리: ${row.distance_m.toLocaleString()}m / ${row.covered?'반경 안':'반경 밖'}`,`최종 점검: ${row.last_inspected}`,`점검 근거: ${row.reasons}`]){const p=document.createElement('p');p.textContent=text;box.append(p)}document.querySelectorAll('.asset').forEach(e=>e.classList.toggle('selected',e.dataset.id===id))}
-function render(){const query=document.querySelector('#search').value.trim().toLocaleLowerCase();const priority=document.querySelector('#priority').value;const zone=document.querySelector('#zone').value;shown=rows.filter(r=>(!priority||r.priority===priority)&&(!zone||r.zone===zone)&&(!query||(r.id+' '+r.name).toLocaleLowerCase().includes(query)));document.querySelector('#count').textContent=`${shown.length} / ${rows.length}개 시설`;const body=document.querySelector('#rows');body.replaceChildren();const ids=new Set(shown.map(r=>r.id));document.querySelectorAll('.asset').forEach(e=>{e.toggleAttribute('hidden',!ids.has(e.dataset.id))});for(const row of shown){const tr=document.createElement('tr');const td=document.createElement('td');const button=document.createElement('button');button.textContent=row.name+' / '+row.id;button.onclick=()=>select(row.id);td.append(button);tr.append(td);for(const value of [row.zone,row.priority,row.score,row.nearest_center,row.distance_m+'m',row.reasons]){const cell=document.createElement('td');cell.textContent=value;tr.append(cell)}body.append(tr)}if(!shown.length){const tr=document.createElement('tr');const td=document.createElement('td');td.colSpan=7;td.className='empty';td.textContent='조건에 맞는 시설이 없습니다.';tr.append(td);body.append(tr)}}
-for(const id of ['search','priority','zone'])document.querySelector('#'+id).addEventListener('input',render);
-document.querySelectorAll('.asset').forEach(e=>{e.onclick=()=>select(e.dataset.id);e.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select(e.dataset.id)}}});
-document.querySelector('#download').onclick=()=>{const keys=['id','name','zone','priority','score','distance_m','reasons'];const csv=v=>'"'+String(v).replace(/^[\s]*([=+@-])/g,"'$1").replaceAll('"','""')+'"';const text='\uFEFF'+[keys,...shown.map(r=>keys.map(k=>r[k]))].map(row=>row.map(csv).join(',')).join('\r\n');const url=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='filtered-facilities.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+<!doctype html>
+<html lang="ko">
+  <head>
+    <link rel="icon" href="data:," />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>시설 점검 우선순위 · GIS 포트폴리오</title>
+    <style>
+      :root {
+  --ink: #283e32;
+  --muted: #6b7a6b;
+  --line: #dae2d4;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: #f7f9f3;
+  color: var(--ink);
+  font:
+    14px/1.7 "Segoe UI",
+    "Malgun Gothic",
+    sans-serif;
+}
+.shell {
+  width: min(1180px, calc(100% - 40px));
+  margin: auto;
+}
+header {
+  border-bottom: 1px solid var(--line);
+  padding: 24px 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+header strong {
+  font-size: 18px;
+}
+header span,
+small {
+  font-size: 11px;
+  color: var(--muted);
+}
+h1 {
+  font-size: 30px;
+  letter-spacing: -0.04em;
+  margin: 34px 0 10px;
+}
+h2 {
+  font-size: 15px;
+  margin: 0 0 15px;
+}
+.lead {
+  color: var(--muted);
+  font-size: 13px;
+}
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 26px 0;
+}
+.metrics > div {
+  border: 1px solid var(--line);
+  background: white;
+  padding: 16px 22px;
+  border-radius: 4px;
+}
+.metrics span {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+.metrics strong {
+  font-size: 27px;
+  font-weight: 500;
+}
+.filters {
+  display: flex;
+  gap: 10px;
+  margin: 24px 0;
+}
+input,
+select,
+button {
+  font: inherit;
+  border: 1px solid #c5d0bf;
+  background: white;
+  border-radius: 4px;
+  padding: 9px 12px;
+  color: var(--ink);
+}
+input {
+  flex: 1;
+  min-width: 0;
+}
+button {
+  cursor: pointer;
+  font-size: 12px;
+}
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(230px, 1fr);
+  gap: 18px;
+}
+.map {
+  border: 1px solid var(--line);
+  background: #eef2e8;
+  border-radius: 4px;
+  overflow: hidden;
+}
+svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.asset {
+  fill: #537f62;
+  stroke: white;
+  stroke-width: 2;
+  cursor: pointer;
+}
+.asset[data-priority="P1"] {
+  fill: #bb5945;
+}
+.asset[data-priority="P2"] {
+  fill: #c69a44;
+}
+.asset:focus,
+.asset.selected {
+  stroke: #152c20;
+  stroke-width: 4;
+  outline: none;
+}
+.asset[hidden] {
+  display: none;
+}
+.detail {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 20px;
+  border-radius: 4px;
+}
+.detail p {
+  font-size: 12px;
+}
+.legend {
+  font-size: 11px;
+  color: var(--muted);
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.p1 {
+  color: #a3402c;
+}
+.p2 {
+  color: #986c20;
+}
+.p3 {
+  color: #427253;
+}
+.table-wrap {
+  overflow: auto;
+  margin-top: 24px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+  font-size: 12px;
+}
+th,
+td {
+  text-align: left;
+  padding: 13px;
+  border-bottom: 1px solid var(--line);
+}
+th {
+  font-weight: 500;
+  color: var(--muted);
+  background: #eef2e8;
+}
+td button {
+  padding: 0;
+  border: 0;
+  text-align: left;
+  background: none;
+  color: var(--ink);
+}
+.empty {
+  text-align: center;
+  padding: 25px;
+}
+.notes {
+  padding: 25px 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+.notes p {
+  margin: 6px 0;
+}
+a {
+  color: inherit;
+  text-underline-offset: 4px;
+}
+.status {
+  font-size: 12px;
+  color: var(--muted);
+}
+footer {
+  border-top: 1px solid var(--line);
+  padding: 22px 0;
+  font-size: 11px;
+  color: var(--muted);
+}
+:focus-visible {
+  outline: 2px solid #466c3f;
+  outline-offset: 3px;
+}
+@media (max-width: 760px) {
+  .shell {
+    width: calc(100% - 28px);
+  }
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .filters {
+    flex-wrap: wrap;
+  }
+  .filters input {
+    flex-basis: 100%;
+  }
+  .filters select {
+    flex: 1;
+    min-width: 0;
+  }
+  .metrics {
+    gap: 8px;
+  }
+  .metrics > div {
+    padding: 12px;
+  }
+  h1 {
+    font-size: 25px;
+  }
+  header span {
+    display: none;
+  }
+  table {
+    min-width: 650px;
+  }
+}
+;
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header>
+        <strong>시설점검 지도</strong>
+        <span>GIS / QGIS · PostgreSQL · PostGIS</span>
+      </header>
+      <main>
+        <h1>어디를 먼저 점검해야 할까요?</h1>
+        <p class="lead">
+          시설 상태, 점검 경과, 위험구역과 지원 거점 접근성을 함께 살펴봅니다.
+        </p>
+        <section class="metrics" aria-label="분석 요약">
+          <div>
+            <span>분석 시설</span>
+            <strong id="total"> </strong>
+          </div>
+          <div>
+            <span>우선 점검 P1</span>
+            <strong id="high"> </strong>
+          </div>
+          <div>
+            <span>지원 반경 밖</span>
+            <strong id="uncovered"> </strong>
+          </div>
+        </section>
+        <div class="filters">
+          <input
+            id="search"
+            type="search"
+            placeholder="시설명 또는 ID 검색"
+            aria-label="시설 검색"
+          />
+          <select id="priority" aria-label="우선순위">
+            <option value="">모든 우선순위</option>
+            <option>P1</option>
+            <option>P2</option>
+            <option>P3</option>
+          </select>
+          <select id="zone" aria-label="구역">
+            <option value="">모든 구역</option>
+          </select>
+          <button id="download">현재 목록 CSV</button>
+        </div>
+        <p id="count" class="status" role="status"></p>
+        <div class="layout">
+          <div class="map">
+            <svg
+              viewBox="0 0 1000 670"
+              role="img"
+              aria-label="가상 공공시설 우선순위 지도"
+            >
+              <path d="M 20.00,640.00 L 500.00,640.00 L 500.00,27.23 L 20.00,27.23 L 20.00,640.00 Z" fill-rule="evenodd" fill="#e4ece1" stroke="#c6d2bd"><title>서부 구역</title></path><path d="M 500.00,640.00 L 980.00,640.00 L 980.00,27.23 L 500.00,27.23 L 500.00,640.00 Z" fill-rule="evenodd" fill="#e4ece1" stroke="#c6d2bd"><title>동부 구역</title></path><path d="M 352.31,410.21 L 832.31,410.21 L 832.31,154.89 L 352.31,154.89 L 352.31,410.21 Z" fill-rule="evenodd" fill="#edc4a5" stroke="#c6d2bd"><title>가상 집중 점검구역</title></path><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 01" data-id="FAC-001" data-priority="P3" cx="130.77" cy="563.40" r="7"><title>가상 시설 01</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 02" data-id="FAC-002" data-priority="P3" cx="278.46" cy="563.40" r="7"><title>가상 시설 02</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 03" data-id="FAC-003" data-priority="P2" cx="426.15" cy="563.40" r="7"><title>가상 시설 03</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 04" data-id="FAC-004" data-priority="P2" cx="573.85" cy="563.40" r="7"><title>가상 시설 04</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 05" data-id="FAC-005" data-priority="P3" cx="721.54" cy="563.40" r="7"><title>가상 시설 05</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 06" data-id="FAC-006" data-priority="P3" cx="869.23" cy="563.40" r="7"><title>가상 시설 06</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 07" data-id="FAC-007" data-priority="P2" cx="130.77" cy="474.04" r="7"><title>가상 시설 07</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 08" data-id="FAC-008" data-priority="P2" cx="278.46" cy="474.04" r="7"><title>가상 시설 08</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 09" data-id="FAC-009" data-priority="P2" cx="426.15" cy="474.04" r="7"><title>가상 시설 09</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 10" data-id="FAC-010" data-priority="P3" cx="573.85" cy="474.04" r="7"><title>가상 시설 10</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 11" data-id="FAC-011" data-priority="P3" cx="721.54" cy="474.04" r="7"><title>가상 시설 11</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 12" data-id="FAC-012" data-priority="P1" cx="869.23" cy="474.04" r="7"><title>가상 시설 12</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 13" data-id="FAC-013" data-priority="P3" cx="130.77" cy="384.68" r="7"><title>가상 시설 13</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 14" data-id="FAC-014" data-priority="P2" cx="278.46" cy="384.68" r="7"><title>가상 시설 14</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 15" data-id="FAC-015" data-priority="P1" cx="426.15" cy="384.68" r="7"><title>가상 시설 15</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 16" data-id="FAC-016" data-priority="P1" cx="573.85" cy="384.68" r="7"><title>가상 시설 16</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 17" data-id="FAC-017" data-priority="P3" cx="721.54" cy="384.68" r="7"><title>가상 시설 17</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 18" data-id="FAC-018" data-priority="P3" cx="869.23" cy="384.68" r="7"><title>가상 시설 18</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 19" data-id="FAC-019" data-priority="P3" cx="130.77" cy="295.32" r="7"><title>가상 시설 19</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 20" data-id="FAC-020" data-priority="P2" cx="278.46" cy="295.32" r="7"><title>가상 시설 20</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 21" data-id="FAC-021" data-priority="P1" cx="426.15" cy="295.32" r="7"><title>가상 시설 21</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 22" data-id="FAC-022" data-priority="P2" cx="573.85" cy="295.32" r="7"><title>가상 시설 22</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 23" data-id="FAC-023" data-priority="P2" cx="721.54" cy="295.32" r="7"><title>가상 시설 23</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 24" data-id="FAC-024" data-priority="P1" cx="869.23" cy="295.32" r="7"><title>가상 시설 24</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 25" data-id="FAC-025" data-priority="P3" cx="130.77" cy="205.96" r="7"><title>가상 시설 25</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 26" data-id="FAC-026" data-priority="P3" cx="278.46" cy="205.96" r="7"><title>가상 시설 26</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 27" data-id="FAC-027" data-priority="P2" cx="426.15" cy="205.96" r="7"><title>가상 시설 27</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 28" data-id="FAC-028" data-priority="P1" cx="573.85" cy="205.96" r="7"><title>가상 시설 28</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 29" data-id="FAC-029" data-priority="P2" cx="721.54" cy="205.96" r="7"><title>가상 시설 29</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 30" data-id="FAC-030" data-priority="P2" cx="869.23" cy="205.96" r="7"><title>가상 시설 30</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 31" data-id="FAC-031" data-priority="P3" cx="130.77" cy="116.60" r="7"><title>가상 시설 31</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 32" data-id="FAC-032" data-priority="P2" cx="278.46" cy="116.60" r="7"><title>가상 시설 32</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 33" data-id="FAC-033" data-priority="P3" cx="426.15" cy="116.60" r="7"><title>가상 시설 33</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 34" data-id="FAC-034" data-priority="P3" cx="573.85" cy="116.60" r="7"><title>가상 시설 34</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 35" data-id="FAC-035" data-priority="P2" cx="721.54" cy="116.60" r="7"><title>가상 시설 35</title></circle><circle class="asset" tabindex="0" role="button" aria-label="가상 시설 36" data-id="FAC-036" data-priority="P1" cx="869.23" cy="116.60" r="7"><title>가상 시설 36</title></circle><rect x="235.54" y="174.43" width="12" height="12" fill="#2e4d6b" stroke="white"><title>가상 북부 지원 거점</title></rect><rect x="752.46" y="531.87" width="12" height="12" fill="#2e4d6b" stroke="white"><title>가상 남부 지원 거점</title></rect>
+            </svg>
+            <div class="legend">
+              <span class="p1">● P1 우선 점검</span>
+              <span class="p2">● P2 검토</span>
+              <span class="p3">● P3 일반</span>
+              <span>■ 지원 거점</span>
+              <span>주황 영역: 가상 위험구역</span>
+            </div>
+          </div>
+          <aside class="detail" id="detail">
+            <h2>시설을 선택하세요</h2>
+            <p>
+              지도 또는 목록의 시설명을 누르면 점검 근거를 확인할 수 있습니다.
+            </p>
+          </aside>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>시설 / ID</th>
+                <th>구역</th>
+                <th>우선순위</th>
+                <th>점수</th>
+                <th>최근접 거점</th>
+                <th>거리</th>
+                <th>점검 근거</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+        <section class="notes">
+          <p id="basis"></p>
+          <p>
+            점수: 보수 필요 35 + 점검 180일 초과 25 + 가상 위험구역 25 + 지원
+            반경 밖 15. P1 ≥60, P2 ≥30, 나머지 P3.
+          </p>
+          <p>
+            거리: WGS84 구면 haversine. PostGIS geography의 타원체 거리와 소폭
+            차이가 있으며, 실제 설계·법정 판정 용도로 사용하지 않습니다.
+          </p>
+          <p>
+            지도의 배경·위치·시설은 직접 만든 가상 예제입니다. 실제 공공데이터나
+            국가사업 수행 실적이 아닙니다.
+          </p>
+          <p>
+            <a href="analysis.gpkg">GeoPackage</a> ·
+            <a href="facility-review.qgs">QGIS 프로젝트</a> ·
+            <a href="facilities.csv">전체 CSV</a> ·
+            <a href="report.json">분석 JSON</a> ·
+            <a href="postgis.sql">PostGIS SQL</a>
+          </p>
+        </section>
+      </main>
+      <footer>
+        개인 포트폴리오 · 좌표계 EPSG:4326 · 외부 지도/API 없이 재현할 수
+        있습니다.
+      </footer>
+    </div>
+    <script id="report-data" type="application/json">
+      {"as_of": "2026-10-25", "radius_m": 750, "distance_method": "WGS84 coordinates / spherical haversine R=6371008.8m; PostGIS geography uses spheroid", "synthetic": true, "total": 36, "uncovered": 19, "high_priority": 7, "rows": [{"id": "FAC-001", "name": "가상 시설 01", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-B", "distance_m": 1521.44, "covered": false, "hazard": false, "overdue": false, "score": 15, "priority": "P3", "reasons": "지원 반경 밖", "lon": 127.42, "lat": 36.61}, {"id": "FAC-002", "name": "가상 시설 02", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-B", "distance_m": 1165.66, "covered": false, "hazard": false, "overdue": false, "score": 15, "priority": "P3", "reasons": "지원 반경 밖", "lon": 127.424, "lat": 36.61}, {"id": "FAC-003", "name": "가상 시설 03", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "서부 구역", "nearest_center": "CENTER-B", "distance_m": 810.97, "covered": false, "hazard": false, "overdue": true, "score": 40, "priority": "P2", "reasons": "점검 180일 초과 · 지원 반경 밖", "lon": 127.428, "lat": 36.61}, {"id": "FAC-004", "name": "가상 시설 04", "kind": "안전표지", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 459.93, "covered": true, "hazard": false, "overdue": false, "score": 35, "priority": "P2", "reasons": "보수 필요", "lon": 127.432, "lat": 36.61}, {"id": "FAC-005", "name": "가상 시설 05", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 142.59, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.436, "lat": 36.61}, {"id": "FAC-006", "name": "가상 시설 06", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 289.94, "covered": true, "hazard": false, "overdue": true, "score": 25, "priority": "P3", "reasons": "점검 180일 초과", "lon": 127.44, "lat": 36.61}, {"id": "FAC-007", "name": "가상 시설 07", "kind": "안전표지", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 1306.47, "covered": false, "hazard": false, "overdue": false, "score": 50, "priority": "P2", "reasons": "보수 필요 · 지원 반경 밖", "lon": 127.42, "lat": 36.6135}, {"id": "FAC-008", "name": "가상 시설 08", "kind": "보행시설", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-B", "distance_m": 1193.15, "covered": false, "hazard": false, "overdue": false, "score": 50, "priority": "P2", "reasons": "보수 필요 · 지원 반경 밖", "lon": 127.424, "lat": 36.6135}, {"id": "FAC-009", "name": "가상 시설 09", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "서부 구역", "nearest_center": "CENTER-B", "distance_m": 850.04, "covered": false, "hazard": false, "overdue": true, "score": 40, "priority": "P2", "reasons": "점검 180일 초과 · 지원 반경 밖", "lon": 127.428, "lat": 36.6135}, {"id": "FAC-010", "name": "가상 시설 10", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 525.77, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.432, "lat": 36.6135}, {"id": "FAC-011", "name": "가상 시설 11", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 291.97, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.436, "lat": 36.6135}, {"id": "FAC-012", "name": "가상 시설 12", "kind": "배수시설", "condition": "REPAIR", "last_inspected": "2026-01-10", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 385.97, "covered": true, "hazard": false, "overdue": true, "score": 60, "priority": "P1", "reasons": "보수 필요 · 점검 180일 초과", "lon": 127.44, "lat": 36.6135}, {"id": "FAC-013", "name": "가상 시설 13", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 928.98, "covered": false, "hazard": false, "overdue": false, "score": 15, "priority": "P3", "reasons": "지원 반경 밖", "lon": 127.42, "lat": 36.617}, {"id": "FAC-014", "name": "가상 시설 14", "kind": "보행시설", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 894.03, "covered": false, "hazard": false, "overdue": false, "score": 50, "priority": "P2", "reasons": "보수 필요 · 지원 반경 밖", "lon": 127.424, "lat": 36.617}, {"id": "FAC-015", "name": "가상 시설 15", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 995.21, "covered": false, "hazard": true, "overdue": true, "score": 65, "priority": "P1", "reasons": "점검 180일 초과 · 가상 위험구역 · 지원 반경 밖", "lon": 127.428, "lat": 36.617}, {"id": "FAC-016", "name": "가상 시설 16", "kind": "안전표지", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 802.66, "covered": false, "hazard": true, "overdue": false, "score": 75, "priority": "P1", "reasons": "보수 필요 · 가상 위험구역 · 지원 반경 밖", "lon": 127.432, "lat": 36.617}, {"id": "FAC-017", "name": "가상 시설 17", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 673.11, "covered": true, "hazard": true, "overdue": false, "score": 25, "priority": "P3", "reasons": "가상 위험구역", "lon": 127.436, "lat": 36.617}, {"id": "FAC-018", "name": "가상 시설 18", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 718.9, "covered": true, "hazard": false, "overdue": true, "score": 25, "priority": "P3", "reasons": "점검 180일 초과", "lon": 127.44, "lat": 36.617}, {"id": "FAC-019", "name": "가상 시설 19", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 567.5, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.42, "lat": 36.6205}, {"id": "FAC-020", "name": "가상 시설 20", "kind": "보행시설", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 508.27, "covered": true, "hazard": false, "overdue": false, "score": 35, "priority": "P2", "reasons": "보수 필요", "lon": 127.424, "lat": 36.6205}, {"id": "FAC-021", "name": "가상 시설 21", "kind": "배수시설", "condition": "REPAIR", "last_inspected": "2026-01-10", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 670.44, "covered": true, "hazard": true, "overdue": true, "score": 85, "priority": "P1", "reasons": "보수 필요 · 점검 180일 초과 · 가상 위험구역", "lon": 127.428, "lat": 36.6205}, {"id": "FAC-022", "name": "가상 시설 22", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-A", "distance_m": 946.3, "covered": false, "hazard": true, "overdue": false, "score": 40, "priority": "P2", "reasons": "가상 위험구역 · 지원 반경 밖", "lon": 127.432, "lat": 36.6205}, {"id": "FAC-023", "name": "가상 시설 23", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 1060.12, "covered": false, "hazard": true, "overdue": false, "score": 40, "priority": "P2", "reasons": "가상 위험구역 · 지원 반경 밖", "lon": 127.436, "lat": 36.6205}, {"id": "FAC-024", "name": "가상 시설 24", "kind": "배수시설", "condition": "REPAIR", "last_inspected": "2026-01-10", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 1089.76, "covered": false, "hazard": false, "overdue": true, "score": 75, "priority": "P1", "reasons": "보수 필요 · 점검 180일 초과 · 지원 반경 밖", "lon": 127.44, "lat": 36.6205}, {"id": "FAC-025", "name": "가상 시설 25", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 289.9, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.42, "lat": 36.624}, {"id": "FAC-026", "name": "가상 시설 26", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 142.58, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.424, "lat": 36.624}, {"id": "FAC-027", "name": "가상 시설 27", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 459.85, "covered": true, "hazard": true, "overdue": true, "score": 50, "priority": "P2", "reasons": "점검 180일 초과 · 가상 위험구역", "lon": 127.428, "lat": 36.624}, {"id": "FAC-028", "name": "가상 시설 28", "kind": "안전표지", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-A", "distance_m": 810.83, "covered": false, "hazard": true, "overdue": false, "score": 75, "priority": "P1", "reasons": "보수 필요 · 가상 위험구역 · 지원 반경 밖", "lon": 127.432, "lat": 36.624}, {"id": "FAC-029", "name": "가상 시설 29", "kind": "보행시설", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-A", "distance_m": 1165.45, "covered": false, "hazard": true, "overdue": false, "score": 40, "priority": "P2", "reasons": "가상 위험구역 · 지원 반경 밖", "lon": 127.436, "lat": 36.624}, {"id": "FAC-030", "name": "가상 시설 30", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "동부 구역", "nearest_center": "CENTER-B", "distance_m": 1470.12, "covered": false, "hazard": false, "overdue": true, "score": 40, "priority": "P2", "reasons": "점검 180일 초과 · 지원 반경 밖", "lon": 127.44, "lat": 36.624}, {"id": "FAC-031", "name": "가상 시설 31", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 385.94, "covered": true, "hazard": false, "overdue": false, "score": 0, "priority": "P3", "reasons": "일반 점검", "lon": 127.42, "lat": 36.6275}, {"id": "FAC-032", "name": "가상 시설 32", "kind": "보행시설", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 291.96, "covered": true, "hazard": false, "overdue": false, "score": 35, "priority": "P2", "reasons": "보수 필요", "lon": 127.424, "lat": 36.6275}, {"id": "FAC-033", "name": "가상 시설 33", "kind": "배수시설", "condition": "OK", "last_inspected": "2026-01-10", "zone": "서부 구역", "nearest_center": "CENTER-A", "distance_m": 525.71, "covered": true, "hazard": false, "overdue": true, "score": 25, "priority": "P3", "reasons": "점검 180일 초과", "lon": 127.428, "lat": 36.6275}, {"id": "FAC-034", "name": "가상 시설 34", "kind": "안전표지", "condition": "OK", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-A", "distance_m": 849.9, "covered": false, "hazard": false, "overdue": false, "score": 15, "priority": "P3", "reasons": "지원 반경 밖", "lon": 127.432, "lat": 36.6275}, {"id": "FAC-035", "name": "가상 시설 35", "kind": "보행시설", "condition": "REPAIR", "last_inspected": "2026-09-01", "zone": "동부 구역", "nearest_center": "CENTER-A", "distance_m": 1192.95, "covered": false, "hazard": false, "overdue": false, "score": 50, "priority": "P2", "reasons": "보수 필요 · 지원 반경 밖", "lon": 127.436, "lat": 36.6275}, {"id": "FAC-036", "name": "가상 시설 36", "kind": "배수시설", "condition": "REPAIR", "last_inspected": "2026-01-10", "zone": "동부 구역", "nearest_center": "CENTER-A", "distance_m": 1542.32, "covered": false, "hazard": false, "overdue": true, "score": 75, "priority": "P1", "reasons": "보수 필요 · 점검 180일 초과 · 지원 반경 밖", "lon": 127.44, "lat": 36.6275}]}
+    </script>
+    <script>
+      const report = JSON.parse(document.querySelector("#report-data").textContent);
+const rows = report.rows;
+let shown = rows;
+document.querySelector("#total").textContent = report.total;
+document.querySelector("#high").textContent = report.high_priority;
+document.querySelector("#uncovered").textContent = report.uncovered;
+document.querySelector("#basis").textContent =
+  `기준일 ${report.as_of} · 지원 반경 ${report.radius_m}m · 가상 시설 ${report.total}개`;
+for (const zone of [...new Set(rows.map((r) => r.zone))].sort()) {
+  const option = document.createElement("option");
+  option.value = zone;
+  option.textContent = zone;
+  document.querySelector("#zone").append(option);
+}
+function select(id) {
+  const row = rows.find((r) => r.id === id);
+  if (!row) return;
+  const box = document.querySelector("#detail");
+  box.replaceChildren();
+  const title = document.createElement("h2");
+  title.textContent = row.name;
+  box.append(title);
+  for (const text of [
+    `${row.id} · ${row.kind}`,
+    `구역: ${row.zone}`,
+    `우선순위: ${row.priority} / ${row.score}점`,
+    `최근접 거점: ${row.nearest_center}`,
+    `거리: ${row.distance_m.toLocaleString()}m / ${row.covered ? "반경 안" : "반경 밖"}`,
+    `최종 점검: ${row.last_inspected}`,
+    `점검 근거: ${row.reasons}`,
+  ]) {
+    const p = document.createElement("p");
+    p.textContent = text;
+    box.append(p);
+  }
+  document
+    .querySelectorAll(".asset")
+    .forEach((e) => e.classList.toggle("selected", e.dataset.id === id));
+}
+function render() {
+  const query = document
+    .querySelector("#search")
+    .value.trim()
+    .toLocaleLowerCase();
+  const priority = document.querySelector("#priority").value;
+  const zone = document.querySelector("#zone").value;
+  shown = rows.filter(
+    (r) =>
+      (!priority || r.priority === priority) &&
+      (!zone || r.zone === zone) &&
+      (!query || (r.id + " " + r.name).toLocaleLowerCase().includes(query)),
+  );
+  document.querySelector("#count").textContent =
+    `${shown.length} / ${rows.length}개 시설`;
+  const body = document.querySelector("#rows");
+  body.replaceChildren();
+  const ids = new Set(shown.map((r) => r.id));
+  document.querySelectorAll(".asset").forEach((e) => {
+    e.toggleAttribute("hidden", !ids.has(e.dataset.id));
+  });
+  for (const row of shown) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    const button = document.createElement("button");
+    button.textContent = row.name + " / " + row.id;
+    button.onclick = () => select(row.id);
+    td.append(button);
+    tr.append(td);
+    for (const value of [
+      row.zone,
+      row.priority,
+      row.score,
+      row.nearest_center,
+      row.distance_m + "m",
+      row.reasons,
+    ]) {
+      const cell = document.createElement("td");
+      cell.textContent = value;
+      tr.append(cell);
+    }
+    body.append(tr);
+  }
+  if (!shown.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 7;
+    td.className = "empty";
+    td.textContent = "조건에 맞는 시설이 없습니다.";
+    tr.append(td);
+    body.append(tr);
+  }
+}
+for (const id of ["search", "priority", "zone"])
+  document.querySelector("#" + id).addEventListener("input", render);
+document.querySelectorAll(".asset").forEach((e) => {
+  e.onclick = () => select(e.dataset.id);
+  e.onkeydown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      select(e.dataset.id);
+    }
+  };
+});
+document.querySelector("#download").onclick = () => {
+  const keys = [
+    "id",
+    "name",
+    "zone",
+    "priority",
+    "score",
+    "distance_m",
+    "reasons",
+  ];
+  const csv = (v) =>
+    '"' +
+    String(v)
+      .replace(/^[\s]*([=+@-])/g, "'$1")
+      .replaceAll('"', '""') +
+    '"';
+  const text =
+    "\uFEFF" +
+    [keys, ...shown.map((r) => keys.map((k) => r[k]))]
+      .map((row) => row.map(csv).join(","))
+      .join("\r\n");
+  const url = URL.createObjectURL(
+    new Blob([text], { type: "text/csv;charset=utf-8" }),
+  );
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "filtered-facilities.csv";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
 render();
-</script></body></html>
+
+    </script>
+  </body>
+</html>

@@ -2,10 +2,19 @@ import copy, datetime, json, sqlite3, struct, subprocess, sys, tempfile, unittes
 from contextlib import closing
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from gis_portfolio.analysis import *
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+from gis_portfolio.analysis import (
+    DataError,
+    analyze,
+    coordinate,
+    csv_text,
+    haversine,
+    load_dataset,
+    polygon_covers,
+    validate_collection,
+)
 from gis_portfolio.geopackage import write_geopackage, write_qgis
-from gis_portfolio.__main__ import main
+from gis_portfolio.cli import main
 
 ROOT = Path(__file__).resolve().parents[1]
 
