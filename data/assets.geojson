@@ -1,0 +1,617 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-001",
+        "name": "가상 시설 01",
+        "kind": "안전표지",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.42,
+          36.61
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-002",
+        "name": "가상 시설 02",
+        "kind": "보행시설",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.424,
+          36.61
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-003",
+        "name": "가상 시설 03",
+        "kind": "배수시설",
+        "condition": "OK",
+        "last_inspected": "2026-01-10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.428,
+          36.61
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-004",
+        "name": "가상 시설 04",
+        "kind": "안전표지",
+        "condition": "REPAIR",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.432,
+          36.61
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-005",
+        "name": "가상 시설 05",
+        "kind": "보행시설",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.436,
+          36.61
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-006",
+        "name": "가상 시설 06",
+        "kind": "배수시설",
+        "condition": "OK",
+        "last_inspected": "2026-01-10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.44,
+          36.61
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-007",
+        "name": "가상 시설 07",
+        "kind": "안전표지",
+        "condition": "REPAIR",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.42,
+          36.6135
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-008",
+        "name": "가상 시설 08",
+        "kind": "보행시설",
+        "condition": "REPAIR",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.424,
+          36.6135
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-009",
+        "name": "가상 시설 09",
+        "kind": "배수시설",
+        "condition": "OK",
+        "last_inspected": "2026-01-10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.428,
+          36.6135
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-010",
+        "name": "가상 시설 10",
+        "kind": "안전표지",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.432,
+          36.6135
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-011",
+        "name": "가상 시설 11",
+        "kind": "보행시설",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.436,
+          36.6135
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-012",
+        "name": "가상 시설 12",
+        "kind": "배수시설",
+        "condition": "REPAIR",
+        "last_inspected": "2026-01-10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.44,
+          36.6135
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-013",
+        "name": "가상 시설 13",
+        "kind": "안전표지",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.42,
+          36.617
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-014",
+        "name": "가상 시설 14",
+        "kind": "보행시설",
+        "condition": "REPAIR",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.424,
+          36.617
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-015",
+        "name": "가상 시설 15",
+        "kind": "배수시설",
+        "condition": "OK",
+        "last_inspected": "2026-01-10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.428,
+          36.617
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-016",
+        "name": "가상 시설 16",
+        "kind": "안전표지",
+        "condition": "REPAIR",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.432,
+          36.617
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-017",
+        "name": "가상 시설 17",
+        "kind": "보행시설",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.436,
+          36.617
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-018",
+        "name": "가상 시설 18",
+        "kind": "배수시설",
+        "condition": "OK",
+        "last_inspected": "2026-01-10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.44,
+          36.617
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-019",
+        "name": "가상 시설 19",
+        "kind": "안전표지",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.42,
+          36.6205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-020",
+        "name": "가상 시설 20",
+        "kind": "보행시설",
+        "condition": "REPAIR",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.424,
+          36.6205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-021",
+        "name": "가상 시설 21",
+        "kind": "배수시설",
+        "condition": "REPAIR",
+        "last_inspected": "2026-01-10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.428,
+          36.6205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-022",
+        "name": "가상 시설 22",
+        "kind": "안전표지",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.432,
+          36.6205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-023",
+        "name": "가상 시설 23",
+        "kind": "보행시설",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.436,
+          36.6205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-024",
+        "name": "가상 시설 24",
+        "kind": "배수시설",
+        "condition": "REPAIR",
+        "last_inspected": "2026-01-10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.44,
+          36.6205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-025",
+        "name": "가상 시설 25",
+        "kind": "안전표지",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.42,
+          36.624
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-026",
+        "name": "가상 시설 26",
+        "kind": "보행시설",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.424,
+          36.624
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-027",
+        "name": "가상 시설 27",
+        "kind": "배수시설",
+        "condition": "OK",
+        "last_inspected": "2026-01-10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.428,
+          36.624
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-028",
+        "name": "가상 시설 28",
+        "kind": "안전표지",
+        "condition": "REPAIR",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.432,
+          36.624
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-029",
+        "name": "가상 시설 29",
+        "kind": "보행시설",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.436,
+          36.624
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-030",
+        "name": "가상 시설 30",
+        "kind": "배수시설",
+        "condition": "OK",
+        "last_inspected": "2026-01-10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.44,
+          36.624
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-031",
+        "name": "가상 시설 31",
+        "kind": "안전표지",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.42,
+          36.6275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-032",
+        "name": "가상 시설 32",
+        "kind": "보행시설",
+        "condition": "REPAIR",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.424,
+          36.6275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-033",
+        "name": "가상 시설 33",
+        "kind": "배수시설",
+        "condition": "OK",
+        "last_inspected": "2026-01-10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.428,
+          36.6275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-034",
+        "name": "가상 시설 34",
+        "kind": "안전표지",
+        "condition": "OK",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.432,
+          36.6275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-035",
+        "name": "가상 시설 35",
+        "kind": "보행시설",
+        "condition": "REPAIR",
+        "last_inspected": "2026-09-01"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.436,
+          36.6275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FAC-036",
+        "name": "가상 시설 36",
+        "kind": "배수시설",
+        "condition": "REPAIR",
+        "last_inspected": "2026-01-10"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.44,
+          36.6275
+        ]
+      }
+    }
+  ]
+}

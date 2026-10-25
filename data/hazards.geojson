@@ -1,0 +1,39 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HAZARD-A",
+        "name": "가상 집중 점검구역"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              127.426,
+              36.616
+            ],
+            [
+              127.439,
+              36.616
+            ],
+            [
+              127.439,
+              36.626
+            ],
+            [
+              127.426,
+              36.626
+            ],
+            [
+              127.426,
+              36.616
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "rows_verified": 36,
+  "max_distance_difference_m": 3.4849,
+  "method": "PostGIS geography spheroid compared with Python spherical haversine; fixture tolerance 5m"
+}

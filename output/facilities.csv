@@ -1,0 +1,37 @@
+﻿id,name,kind,zone,priority,score,nearest_center,distance_m,covered,hazard,overdue,reasons,last_inspected
+FAC-001,가상 시설 01,안전표지,서부 구역,P3,15,CENTER-B,1521.44,False,False,False,지원 반경 밖,2026-09-01
+FAC-002,가상 시설 02,보행시설,서부 구역,P3,15,CENTER-B,1165.66,False,False,False,지원 반경 밖,2026-09-01
+FAC-003,가상 시설 03,배수시설,서부 구역,P2,40,CENTER-B,810.97,False,False,True,점검 180일 초과 · 지원 반경 밖,2026-01-10
+FAC-004,가상 시설 04,안전표지,동부 구역,P2,35,CENTER-B,459.93,True,False,False,보수 필요,2026-09-01
+FAC-005,가상 시설 05,보행시설,동부 구역,P3,0,CENTER-B,142.59,True,False,False,일반 점검,2026-09-01
+FAC-006,가상 시설 06,배수시설,동부 구역,P3,25,CENTER-B,289.94,True,False,True,점검 180일 초과,2026-01-10
+FAC-007,가상 시설 07,안전표지,서부 구역,P2,50,CENTER-A,1306.47,False,False,False,보수 필요 · 지원 반경 밖,2026-09-01
+FAC-008,가상 시설 08,보행시설,서부 구역,P2,50,CENTER-B,1193.15,False,False,False,보수 필요 · 지원 반경 밖,2026-09-01
+FAC-009,가상 시설 09,배수시설,서부 구역,P2,40,CENTER-B,850.04,False,False,True,점검 180일 초과 · 지원 반경 밖,2026-01-10
+FAC-010,가상 시설 10,안전표지,동부 구역,P3,0,CENTER-B,525.77,True,False,False,일반 점검,2026-09-01
+FAC-011,가상 시설 11,보행시설,동부 구역,P3,0,CENTER-B,291.97,True,False,False,일반 점검,2026-09-01
+FAC-012,가상 시설 12,배수시설,동부 구역,P1,60,CENTER-B,385.97,True,False,True,보수 필요 · 점검 180일 초과,2026-01-10
+FAC-013,가상 시설 13,안전표지,서부 구역,P3,15,CENTER-A,928.98,False,False,False,지원 반경 밖,2026-09-01
+FAC-014,가상 시설 14,보행시설,서부 구역,P2,50,CENTER-A,894.03,False,False,False,보수 필요 · 지원 반경 밖,2026-09-01
+FAC-015,가상 시설 15,배수시설,서부 구역,P1,65,CENTER-A,995.21,False,True,True,점검 180일 초과 · 가상 위험구역 · 지원 반경 밖,2026-01-10
+FAC-016,가상 시설 16,안전표지,동부 구역,P1,75,CENTER-B,802.66,False,True,False,보수 필요 · 가상 위험구역 · 지원 반경 밖,2026-09-01
+FAC-017,가상 시설 17,보행시설,동부 구역,P3,25,CENTER-B,673.11,True,True,False,가상 위험구역,2026-09-01
+FAC-018,가상 시설 18,배수시설,동부 구역,P3,25,CENTER-B,718.9,True,False,True,점검 180일 초과,2026-01-10
+FAC-019,가상 시설 19,안전표지,서부 구역,P3,0,CENTER-A,567.5,True,False,False,일반 점검,2026-09-01
+FAC-020,가상 시설 20,보행시설,서부 구역,P2,35,CENTER-A,508.27,True,False,False,보수 필요,2026-09-01
+FAC-021,가상 시설 21,배수시설,서부 구역,P1,85,CENTER-A,670.44,True,True,True,보수 필요 · 점검 180일 초과 · 가상 위험구역,2026-01-10
+FAC-022,가상 시설 22,안전표지,동부 구역,P2,40,CENTER-A,946.3,False,True,False,가상 위험구역 · 지원 반경 밖,2026-09-01
+FAC-023,가상 시설 23,보행시설,동부 구역,P2,40,CENTER-B,1060.12,False,True,False,가상 위험구역 · 지원 반경 밖,2026-09-01
+FAC-024,가상 시설 24,배수시설,동부 구역,P1,75,CENTER-B,1089.76,False,False,True,보수 필요 · 점검 180일 초과 · 지원 반경 밖,2026-01-10
+FAC-025,가상 시설 25,안전표지,서부 구역,P3,0,CENTER-A,289.9,True,False,False,일반 점검,2026-09-01
+FAC-026,가상 시설 26,보행시설,서부 구역,P3,0,CENTER-A,142.58,True,False,False,일반 점검,2026-09-01
+FAC-027,가상 시설 27,배수시설,서부 구역,P2,50,CENTER-A,459.85,True,True,True,점검 180일 초과 · 가상 위험구역,2026-01-10
+FAC-028,가상 시설 28,안전표지,동부 구역,P1,75,CENTER-A,810.83,False,True,False,보수 필요 · 가상 위험구역 · 지원 반경 밖,2026-09-01
+FAC-029,가상 시설 29,보행시설,동부 구역,P2,40,CENTER-A,1165.45,False,True,False,가상 위험구역 · 지원 반경 밖,2026-09-01
+FAC-030,가상 시설 30,배수시설,동부 구역,P2,40,CENTER-B,1470.12,False,False,True,점검 180일 초과 · 지원 반경 밖,2026-01-10
+FAC-031,가상 시설 31,안전표지,서부 구역,P3,0,CENTER-A,385.94,True,False,False,일반 점검,2026-09-01
+FAC-032,가상 시설 32,보행시설,서부 구역,P2,35,CENTER-A,291.96,True,False,False,보수 필요,2026-09-01
+FAC-033,가상 시설 33,배수시설,서부 구역,P3,25,CENTER-A,525.71,True,False,True,점검 180일 초과,2026-01-10
+FAC-034,가상 시설 34,안전표지,동부 구역,P3,15,CENTER-A,849.9,False,False,False,지원 반경 밖,2026-09-01
+FAC-035,가상 시설 35,보행시설,동부 구역,P2,50,CENTER-A,1192.95,False,False,False,보수 필요 · 지원 반경 밖,2026-09-01
+FAC-036,가상 시설 36,배수시설,동부 구역,P1,75,CENTER-A,1542.32,False,False,True,보수 필요 · 점검 180일 초과 · 지원 반경 밖,2026-01-10

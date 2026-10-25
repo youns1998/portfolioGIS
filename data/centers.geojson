@@ -1,0 +1,33 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CENTER-A",
+        "name": "가상 북부 지원 거점"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.423,
+          36.625
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CENTER-B",
+        "name": "가상 남부 지원 거점"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.437,
+          36.611
+        ]
+      }
+    }
+  ]
+}
